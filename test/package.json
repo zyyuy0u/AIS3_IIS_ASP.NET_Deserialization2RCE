@@ -1,0 +1,23 @@
+{
+  "name": "flux-website-test",
+  "version": "1.0.0",
+  "description": "Playwright 自動化測試 - FLUX 創意機構網站驗證",
+  "main": "website_test.js",
+  "scripts": {
+    "test": "playwright test website_test.js",
+    "test:headed": "playwright test website_test.js --headed",
+    "test:debug": "playwright test website_test.js --debug",
+    "show-report": "playwright show-report"
+  },
+  "keywords": [
+    "playwright",
+    "testing",
+    "automation",
+    "website-validation"
+  ],
+  "author": "Test Suite",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  }
+}
