@@ -1,105 +1,170 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FLUX STUDIO - 創意機構</title>
+    <title>YMJT Corp - Young Minds Join Together</title>
     <style>
-        * {
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        :root {
+            --navy: #0c1b2a;
+            --navy-light: #152238;
+            --blue: #1e3a5f;
+            --blue-accent: #2563eb;
+            --teal: #0ea5e9;
+            --gold: #d4a574;
+            --gold-light: #e8c9a0;
+            --white: #ffffff;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --font-sans: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-display: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: 'Courier New', monospace;
-            background-color: #000;
-            color: #fff;
-            line-height: 1.2;
+            font-family: var(--font-sans);
+            color: rgba(255,255,255,0.9);
+            background: var(--navy);
+            line-height: 1.6;
             overflow-x: hidden;
         }
 
-        /* ===== 變數與基礎 ===== */
-        :root {
-            --primary: #00ff00;
-            --secondary: #ff0080;
-            --accent: #fff;
-            --dark: #000;
-            --gray: #333;
-        }
-
-        /* ===== 導覽列 ===== */
+        /* ===== Header ===== */
         header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            padding: 2rem;
+            z-index: 1000;
+            background: rgba(12, 27, 42, 0.97);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.3s ease;
+        }
+
+        header.scrolled {
+            box-shadow: 0 4px 30px rgba(0,0,0,0.15);
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            z-index: 1000;
-            background: rgba(0, 0, 0, 0.95);
-            border-bottom: 3px solid var(--gray);
+            height: 72px;
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: 900;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            animation: flicker 0.3s infinite;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--white);
         }
 
-        @keyframes flicker {
-            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-                opacity: 1;
-            }
-            20%, 24%, 55% {
-                opacity: 0.7;
-            }
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--blue-accent), var(--teal));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 16px;
+            color: var(--white);
+            letter-spacing: -1px;
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo-text span {
+            color: var(--gold);
         }
 
         nav ul {
             display: flex;
             list-style: none;
             gap: 2rem;
+            align-items: center;
         }
 
         nav a {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--accent);
+            color: rgba(255,255,255,0.75);
             text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: color 0.2s;
             position: relative;
-            transition: all 0.2s;
+            padding: 4px 0;
+        }
+
+        nav a:hover {
+            color: var(--white);
         }
 
         nav a::after {
             content: '';
             position: absolute;
-            bottom: -4px;
+            bottom: -2px;
             left: 0;
             width: 0;
             height: 2px;
-            background: var(--primary);
-            transition: width 0.3s;
+            background: var(--teal);
+            transition: width 0.3s ease;
+            border-radius: 1px;
         }
 
         nav a:hover::after {
             width: 100%;
         }
 
-        /* ===== Hero Section ===== */
+        .nav-cta {
+            background: var(--blue-accent);
+            color: var(--white) !important;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .nav-cta:hover {
+            background: #3b82f6;
+            transform: translateY(-1px);
+        }
+
+        .nav-cta::after {
+            display: none;
+        }
+
+        /* ===== Hero ===== */
         .hero {
-            height: 100vh;
+            min-height: 100vh;
+            background: linear-gradient(165deg, var(--navy) 0%, var(--navy-light) 40%, var(--blue) 100%);
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 6rem 2rem;
-            border-bottom: 3px solid var(--gray);
+            align-items: center;
             position: relative;
             overflow: hidden;
         }
@@ -107,351 +172,626 @@
         .hero::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, transparent 0%, transparent 48%, var(--primary) 50%, transparent 52%, transparent 100%);
-            opacity: 0.05;
+            top: -50%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(14,165,233,0.12) 0%, transparent 70%);
+            border-radius: 50%;
             pointer-events: none;
         }
 
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            max-width: 80%;
-        }
-
-        .hero h1 {
-            font-size: 6vw;
-            font-weight: 900;
-            line-height: 1;
-            text-transform: uppercase;
-            letter-spacing: -2px;
-            margin-bottom: 1rem;
-            animation: slideIn 0.8s cubic-bezier(0.33, 0.66, 0.66, 1) forwards;
-            text-shadow: -3px 3px 0px var(--primary);
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-100px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 600px;
-            margin-bottom: 2rem;
-            animation: slideUp 0.8s 0.2s cubic-bezier(0.33, 0.66, 0.66, 1) forwards;
-            opacity: 0;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .cta-btn {
-            display: inline-block;
-            padding: 1rem 2rem;
-            background: var(--primary);
-            color: var(--dark);
-            text-decoration: none;
-            font-weight: 900;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            border: 3px solid var(--primary);
-            cursor: pointer;
-            transition: all 0.2s;
-            animation: slideUp 0.8s 0.4s cubic-bezier(0.33, 0.66, 0.66, 1) forwards;
-            opacity: 0;
-        }
-
-        .cta-btn:hover {
-            background: var(--dark);
-            color: var(--primary);
-            transform: translate(-3px, -3px);
-            box-shadow: 3px 3px 0px var(--primary);
-        }
-
-        /* ===== 案例研究 ===== */
-        .case-studies {
-            padding: 6rem 2rem;
-            background: var(--dark);
-            border-bottom: 3px solid var(--gray);
-        }
-
-        .section-title {
-            font-size: 3rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: -1px;
-            margin-bottom: 4rem;
-            position: relative;
-        }
-
-        .section-title::before {
+        .hero::after {
             content: '';
             position: absolute;
-            left: -20px;
-            top: 50%;
-            width: 40px;
-            height: 3px;
-            background: var(--primary);
-            transform: translateY(-50%);
+            bottom: -30%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(37,99,235,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
         }
 
-        .cases-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 3rem;
-            margin-bottom: 3rem;
-        }
-
-        .case-card {
-            border: 3px solid var(--gray);
-            aspect-ratio: 16/9;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            group: 'case';
-        }
-
-        .case-card::before {
-            content: '';
+        .hero-grid {
             position: absolute;
             inset: 0;
-            background: var(--primary);
-            opacity: 0;
-            transition: opacity 0.3s;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+        }
+
+        .hero-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 8rem 2rem 6rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
             z-index: 1;
-            mix-blend-mode: screen;
         }
 
-        .case-card:hover::before {
-            opacity: 0.1;
+        .hero-content h1 {
+            font-family: var(--font-display);
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            color: var(--white);
+            margin-bottom: 1.5rem;
         }
 
-        .case-image {
+        .hero-content h1 .highlight {
+            background: linear-gradient(135deg, var(--teal), var(--blue-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-content p {
+            font-size: 1.15rem;
+            color: rgba(255,255,255,0.65);
+            max-width: 500px;
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, var(--blue-accent), var(--teal));
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37,99,235,0.35);
+        }
+
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            background: transparent;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: 8px;
+            border: 1.5px solid rgba(255,255,255,0.25);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .btn-outline:hover {
+            border-color: rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-graphic {
             width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, var(--gray) 25%, transparent 25%, transparent 50%, var(--gray) 50%, var(--gray) 75%, transparent 75%, transparent);
-            background-size: 40px 40px;
+            max-width: 480px;
+            aspect-ratio: 1;
+            position: relative;
+        }
+
+        .hero-ring {
+            position: absolute;
+            border: 1.5px solid rgba(14,165,233,0.2);
+            border-radius: 50%;
+            animation: rotate 30s linear infinite;
+        }
+
+        .hero-ring:nth-child(1) {
+            inset: 0;
+        }
+
+        .hero-ring:nth-child(2) {
+            inset: 15%;
+            border-color: rgba(37,99,235,0.15);
+            animation-duration: 25s;
+            animation-direction: reverse;
+        }
+
+        .hero-ring:nth-child(3) {
+            inset: 30%;
+            border-color: rgba(14,165,233,0.12);
+            animation-duration: 20s;
+        }
+
+        .hero-ring-dot {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--teal);
+            border-radius: 50%;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 15px rgba(14,165,233,0.5);
+        }
+
+        .hero-center {
+            position: absolute;
+            inset: 38%;
+            background: linear-gradient(135deg, rgba(37,99,235,0.15), rgba(14,165,233,0.1));
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            text-align: center;
-            padding: 2rem;
-            animation: gridShift 20s linear infinite;
-            position: relative;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(14,165,233,0.2);
         }
 
-        .case-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .hero-center-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--white);
+            letter-spacing: 2px;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== Services ===== */
+        .services {
+            padding: 7rem 2rem;
+            background: var(--navy-light);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--blue-accent);
+            margin-bottom: 1rem;
+        }
+
+        .section-heading {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .section-desc {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.5);
+            max-width: 600px;
+            margin-bottom: 3.5rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            padding: 2.5rem 2rem;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
             position: absolute;
             top: 0;
             left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--blue-accent), var(--teal));
+            opacity: 0;
+            transition: opacity 0.3s;
         }
 
-        @keyframes gridShift {
-            from {
-                background-position: 0 0;
-            }
-            to {
-                background-position: 40px 40px;
-            }
+        .service-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255,255,255,0.07);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
         }
 
-        .case-overlay {
+        .service-card:hover::before {
+            opacity: 1;
+        }
+
+        .service-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, rgba(37,99,235,0.1), rgba(14,165,233,0.08));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .service-card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.75rem;
+        }
+
+        .service-card p {
+            font-size: 0.925rem;
+            color: rgba(255,255,255,0.5);
+            line-height: 1.6;
+        }
+
+        /* ===== Projects ===== */
+        .projects {
+            padding: 7rem 2rem;
+            background: var(--navy);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .project-card {
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            aspect-ratio: 16/10;
+            cursor: pointer;
+            group: project;
+        }
+
+        .project-bg {
             position: absolute;
             inset: 0;
-            background: rgba(0, 0, 0, 0.8);
+            transition: transform 0.5s;
+        }
+
+        .project-card:hover .project-bg {
+            transform: scale(1.05);
+        }
+
+        .project-bg-1 {
+            background: linear-gradient(135deg, #1e3a5f, #0ea5e9);
+        }
+
+        .project-bg-2 {
+            background: linear-gradient(135deg, #0c1b2a, #2563eb);
+        }
+
+        .project-bg-3 {
+            background: linear-gradient(135deg, #152238, #d4a574);
+        }
+
+        .project-bg-4 {
+            background: linear-gradient(135deg, #334155, #0ea5e9);
+        }
+
+        .project-pattern {
+            position: absolute;
+            inset: 0;
+            opacity: 0.1;
+            background-image:
+                radial-gradient(circle at 25% 25%, rgba(255,255,255,0.3) 1px, transparent 1px),
+                radial-gradient(circle at 75% 75%, rgba(255,255,255,0.3) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .project-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(12,27,42,0.9) 0%, transparent 50%);
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
             padding: 2rem;
-            z-index: 2;
-            opacity: 0;
-            transition: opacity 0.3s;
+            z-index: 1;
         }
 
-        .case-card:hover .case-overlay {
-            opacity: 1;
-        }
-
-        .case-title {
-            font-size: 1.5rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            margin-bottom: 0.5rem;
-            color: var(--primary);
-        }
-
-        .case-desc {
-            font-size: 0.875rem;
-            color: var(--accent);
-            margin-bottom: 1rem;
-        }
-
-        .case-tag {
+        .project-tag {
             display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            font-size: 0.75rem;
+            padding: 4px 12px;
+            background: rgba(14,165,233,0.2);
+            color: var(--teal);
+            font-size: 0.7rem;
+            font-weight: 600;
             text-transform: uppercase;
-            margin-right: 0.5rem;
+            letter-spacing: 1px;
+            border-radius: 20px;
+            margin-bottom: 0.75rem;
+            width: fit-content;
         }
 
-        /* ===== 統計區塊 ===== */
+        .project-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+
+        .project-desc {
+            font-size: 0.875rem;
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* ===== Stats ===== */
         .stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            margin: 4rem 0;
+            padding: 5rem 2rem;
+            background: var(--navy);
+            position: relative;
+            overflow: hidden;
         }
 
-        .stat {
-            border: 3px solid var(--gray);
-            padding: 2rem;
+        .stats::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(14,165,233,0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-item {
             text-align: center;
+            padding: 2rem 1rem;
         }
 
         .stat-number {
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: var(--primary);
-            text-transform: uppercase;
+            font-family: var(--font-display);
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--white);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-number .accent {
+            color: var(--teal);
         }
 
         .stat-label {
-            font-size: 0.75rem;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.5);
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-top: 1rem;
-            color: var(--accent);
+            letter-spacing: 1.5px;
+            font-weight: 500;
         }
 
-        /* ===== 團隊 ===== */
+        /* ===== Team ===== */
         .team {
-            padding: 6rem 2rem;
-            background: var(--dark);
-            border-bottom: 3px solid var(--gray);
+            padding: 7rem 2rem;
+            background: var(--navy-light);
+        }
+
+        .team-header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+
+        .team-header .section-desc {
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .team-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 2rem;
-            margin-top: 3rem;
         }
 
-        .team-member {
-            border: 3px solid var(--gray);
+        .team-card {
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
             padding: 2rem;
             text-align: center;
-            position: relative;
-            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
             transition: all 0.3s;
         }
 
-        .team-member:hover {
-            background: var(--gray);
-            transform: translate(-3px, -3px);
-            box-shadow: 3px 3px 0px var(--primary);
+        .team-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255,255,255,0.07);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
         }
 
-        .member-avatar {
-            width: 60px;
-            height: 60px;
-            background: var(--primary);
-            color: var(--dark);
+        .team-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            margin: 0 auto 1.25rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 900;
-            font-size: 1.5rem;
-            margin: 0 auto 1rem;
-            border: 2px solid var(--primary);
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--white);
         }
 
-        .member-name {
-            font-size: 0.95rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.5rem;
+        .avatar-1 { background: linear-gradient(135deg, #2563eb, #0ea5e9); }
+        .avatar-2 { background: linear-gradient(135deg, #d4a574, #e8c9a0); }
+        .avatar-3 { background: linear-gradient(135deg, #0ea5e9, #06b6d4); }
+        .avatar-4 { background: linear-gradient(135deg, #1e3a5f, #334155); }
+        .avatar-5 { background: linear-gradient(135deg, #f59e0b, #d4a574); }
+        .avatar-6 { background: linear-gradient(135deg, #6366f1, #2563eb); }
+
+        .team-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.25rem;
         }
 
-        .member-role {
-            font-size: 0.75rem;
-            color: var(--primary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        .team-role {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.5);
         }
 
-        /* ===== 聯絡表單 ===== */
+        /* ===== Contact ===== */
         .contact {
-            padding: 6rem 2rem;
-            background: var(--dark);
-            border-bottom: 3px solid var(--gray);
+            padding: 7rem 2rem;
+            background: var(--navy);
         }
 
-        .contact-wrapper {
-            max-width: 800px;
-            margin: 0 auto;
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .contact-info h2 {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .contact-info p {
+            font-size: 1.05rem;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        .contact-detail {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-detail-icon {
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .contact-detail-text strong {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--white);
+            margin-bottom: 2px;
+        }
+
+        .contact-detail-text span {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .contact-detail-text a {
+            color: var(--teal);
+            text-decoration: none;
+        }
+
+        .contact-form {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 2.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
         }
 
         .form-group {
-            margin-bottom: 2rem;
+            margin-bottom: 1.25rem;
         }
 
         .form-group label {
             display: block;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.7);
             margin-bottom: 0.5rem;
-            font-weight: 900;
         }
 
         .form-group input,
         .form-group textarea,
         .form-group select {
             width: 100%;
-            padding: 1rem;
-            background: transparent;
-            border: 2px solid var(--gray);
-            color: var(--accent);
-            font-family: 'Courier New', monospace;
-            font-size: 1rem;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.06);
+            border: 1.5px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            font-family: var(--font-sans);
+            font-size: 0.925rem;
+            color: rgba(255,255,255,0.9);
             transition: all 0.2s;
+            outline: none;
         }
 
         .form-group input:focus,
         .form-group textarea:focus,
         .form-group select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: inset 0 0 0 1px var(--primary);
+            border-color: var(--teal);
+            box-shadow: 0 0 0 3px rgba(14,165,233,0.15);
+        }
+
+        .form-group select option {
+            background: var(--navy-light);
+            color: rgba(255,255,255,0.9);
         }
 
         .form-group textarea {
@@ -460,453 +800,600 @@
         }
 
         .form-submit {
-            padding: 1rem 2rem;
-            background: var(--secondary);
-            color: var(--accent);
-            border: 3px solid var(--secondary);
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: all 0.2s;
             width: 100%;
-            font-family: 'Courier New', monospace;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--blue-accent), var(--teal));
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-family: var(--font-sans);
             font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
         .form-submit:hover {
-            background: var(--accent);
-            color: var(--secondary);
-            transform: translate(-3px, -3px);
-            box-shadow: 3px 3px 0px var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37,99,235,0.3);
         }
 
-        /* ===== 頁尾 ===== */
+        /* ===== Footer ===== */
         footer {
-            padding: 3rem 2rem;
-            background: var(--dark);
-            border-top: 3px solid var(--gray);
+            background: var(--navy);
+            color: rgba(255,255,255,0.6);
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
             gap: 3rem;
+            margin-bottom: 3rem;
         }
 
-        .footer-section h4 {
-            font-size: 0.75rem;
+        .footer-brand p {
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            line-height: 1.6;
+            max-width: 280px;
+        }
+
+        .footer-col h4 {
+            font-size: 0.8rem;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 1rem;
-            font-weight: 900;
+            letter-spacing: 1.5px;
+            color: var(--white);
+            margin-bottom: 1.25rem;
         }
 
-        .footer-section ul {
+        .footer-col ul {
             list-style: none;
         }
 
-        .footer-section ul li {
-            margin-bottom: 0.5rem;
-            font-size: 0.85rem;
+        .footer-col li {
+            margin-bottom: 0.75rem;
         }
 
-        .footer-section a {
-            color: var(--accent);
+        .footer-col a {
+            color: rgba(255,255,255,0.5);
             text-decoration: none;
-            position: relative;
+            font-size: 0.875rem;
+            transition: color 0.2s;
         }
 
-        .footer-section a::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 1px;
-            background: var(--primary);
-            transition: width 0.3s;
-        }
-
-        .footer-section a:hover::after {
-            width: 100%;
+        .footer-col a:hover {
+            color: var(--teal);
         }
 
         .footer-bottom {
-            grid-column: 1/-1;
+            border-top: 1px solid rgba(255,255,255,0.08);
             padding-top: 2rem;
-            border-top: 2px solid var(--gray);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 0.8rem;
         }
 
-        .footer-social {
+        .footer-links {
             display: flex;
-            gap: 1.5rem;
+            gap: 2rem;
         }
 
-        /* ===== 響應式 ===== */
+        .footer-links a {
+            color: rgba(255,255,255,0.4);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--teal);
+        }
+
+        /* ===== Scroll Animations ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== Responsive ===== */
         @media (max-width: 1024px) {
-            .cases-grid {
+            .hero-inner {
                 grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-content p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
 
             .team-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
 
-            .stats {
-                grid-template-columns: 1fr;
-            }
-
-            footer {
-                grid-template-columns: 1fr;
-            }
-
-            .hero h1 {
-                font-size: 3rem;
-            }
-
-            nav ul {
-                gap: 1rem;
-            }
-
-            nav a {
-                font-size: 0.65rem;
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
             }
         }
 
         @media (max-width: 768px) {
-            header {
+            .header-inner {
+                height: auto;
+                padding: 1rem 1.5rem;
                 flex-direction: column;
                 gap: 1rem;
-                align-items: flex-start;
             }
 
             nav ul {
-                flex-wrap: wrap;
                 gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
             }
 
-            .hero {
-                height: auto;
-                min-height: 100vh;
-                padding: 6rem 1rem;
+            .hero-content h1 {
+                font-size: 2.25rem;
             }
 
-            .hero h1 {
-                font-size: 2rem;
+            .section-heading {
+                font-size: 1.8rem;
             }
 
-            .section-title {
-                font-size: 2rem;
+            .services-grid,
+            .projects-grid {
+                grid-template-columns: 1fr;
             }
 
             .team-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .contact-grid {
                 grid-template-columns: 1fr;
             }
-        }
 
-        /* ===== 滾動動畫 ===== */
-        .scroll-reveal {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.8s cubic-bezier(0.33, 0.66, 0.66, 1);
-        }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
 
-        .scroll-reveal.active {
-            opacity: 1;
-            transform: translateY(0);
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- ===== 導覽列 ===== -->
-    <header>
-        <div class="logo">FLUX</div>
-        <nav>
-            <ul>
-                <li><a href="#work">WORK</a></li>
-                <li><a href="#team">TEAM</a></li>
-                <li><a href="#contact">CONTACT</a></li>
-            </ul>
-        </nav>
+
+    <!-- ===== Header ===== -->
+    <header id="header">
+        <div class="header-inner">
+            <a href="#" class="logo">
+                <div class="logo-icon">YM</div>
+                <div class="logo-text">YMJT <span>Corp</span></div>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#team">Team</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="report.aspx" class="nav-cta">Client Portal</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
-    <!-- ===== Hero Section ===== -->
+    <!-- ===== Hero ===== -->
     <section class="hero">
-        <div class="hero-content">
-            <h1>WE MAKE<br>THINGS<br>HAPPEN</h1>
-            <p>
-                FLUX is a creative agency that builds bold digital experiences.
-                We combine strategy, design, and technology to create work that moves people.
-            </p>
-            <a href="#work" class="cta-btn">SEE OUR WORK</a>
-        </div>
-    </section>
-
-    <!-- ===== 案例研究 ===== -->
-    <section class="case-studies" id="work">
-        <h2 class="section-title">SELECTED WORK</h2>
-
-        <div class="cases-grid">
-            <div class="case-card scroll-reveal">
-                <div class="case-image">
-                    <img src="download.aspx?file=assets/case-nexus.jpg" alt="NEXUS Project" onerror="this.parentElement.textContent='BRANDING'">
+        <div class="hero-grid"></div>
+        <div class="hero-inner">
+            <div class="hero-content">
+                <h1>Empowering <span class="highlight">Innovation</span> Through Technology</h1>
+                <p>YMJT Corp delivers enterprise-grade digital solutions. We help organizations transform their operations with cutting-edge technology, strategic consulting, and data-driven insights.</p>
+                <div class="hero-buttons">
+                    <a href="#services" class="btn-primary">Our Solutions &#8594;</a>
+                    <a href="#contact" class="btn-outline">Get in Touch</a>
                 </div>
-                <div class="case-overlay">
-                    <div class="case-title">NEXUS</div>
-                    <div class="case-desc">Digital transformation for fintech startup</div>
-                    <div>
-                        <span class="case-tag">BRANDING</span>
-                        <span class="case-tag">UX/UI</span>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-graphic">
+                    <div class="hero-ring">
+                        <div class="hero-ring-dot"></div>
+                    </div>
+                    <div class="hero-ring"></div>
+                    <div class="hero-ring"></div>
+                    <div class="hero-center">
+                        <div class="hero-center-text">YMJT</div>
                     </div>
                 </div>
-            </div>
-
-            <div class="case-card scroll-reveal">
-                <div class="case-image">
-                    <img src="download.aspx?file=assets/case-kinetic.jpg" alt="KINETIC Project" onerror="this.parentElement.textContent='CAMPAIGN'">
-                </div>
-                <div class="case-overlay">
-                    <div class="case-title">KINETIC</div>
-                    <div class="case-desc">Global campaign for sustainable fashion</div>
-                    <div>
-                        <span class="case-tag">CAMPAIGN</span>
-                        <span class="case-tag">MOTION</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="case-card scroll-reveal">
-                <div class="case-image">
-                    <img src="download.aspx?file=assets/case-pulse.jpg" alt="PULSE Project" onerror="this.parentElement.textContent='INTERACTIVE'">
-                </div>
-                <div class="case-overlay">
-                    <div class="case-title">PULSE</div>
-                    <div class="case-desc">Interactive experience for music festival</div>
-                    <div>
-                        <span class="case-tag">INTERACTIVE</span>
-                        <span class="case-tag">WEB</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="case-card scroll-reveal">
-                <div class="case-image">
-                    <img src="download.aspx?file=assets/case-verso.jpg" alt="VERSO Project" onerror="this.parentElement.textContent='IDENTITY'">
-                </div>
-                <div class="case-overlay">
-                    <div class="case-title">VERSO</div>
-                    <div class="case-desc">Complete rebranding for tech platform</div>
-                    <div>
-                        <span class="case-tag">IDENTITY</span>
-                        <span class="case-tag">STRATEGY</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="stats scroll-reveal">
-            <div class="stat">
-                <div class="stat-number">50+</div>
-                <div class="stat-label">PROJECTS DELIVERED</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number">15</div>
-                <div class="stat-label">TEAM MEMBERS</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number">8</div>
-                <div class="stat-label">YEARS CREATING</div>
             </div>
         </div>
     </section>
 
-    <!-- ===== 團隊 ===== -->
+    <!-- ===== Services ===== -->
+    <section class="services" id="services">
+        <div class="container">
+            <div class="section-label reveal">What We Do</div>
+            <h2 class="section-heading reveal">Enterprise Solutions Built for Scale</h2>
+            <p class="section-desc reveal">We combine deep technical expertise with strategic thinking to deliver solutions that drive measurable business outcomes.</p>
+
+            <div class="services-grid">
+                <div class="service-card reveal">
+                    <div class="service-icon">&#9741;</div>
+                    <h3>Cloud Infrastructure</h3>
+                    <p>Design and deploy scalable cloud architectures on AWS, Azure, and GCP. Migration, optimization, and managed services.</p>
+                </div>
+
+                <div class="service-card reveal">
+                    <div class="service-icon">&#9881;</div>
+                    <h3>Digital Transformation</h3>
+                    <p>End-to-end digital strategy and implementation. Modernize legacy systems and automate workflows for operational excellence.</p>
+                </div>
+
+                <div class="service-card reveal">
+                    <div class="service-icon">&#128202;</div>
+                    <h3>Data Analytics</h3>
+                    <p>Turn raw data into strategic insights. Business intelligence dashboards, predictive analytics, and machine learning solutions.</p>
+                </div>
+
+                <div class="service-card reveal">
+                    <div class="service-icon">&#128274;</div>
+                    <h3>Cybersecurity</h3>
+                    <p>Comprehensive security assessments, compliance auditing, and incident response. Protect your assets with defense-in-depth strategies.</p>
+                </div>
+
+                <div class="service-card reveal">
+                    <div class="service-icon">&#128187;</div>
+                    <h3>Custom Development</h3>
+                    <p>Full-stack application development tailored to your business needs. Web, mobile, and enterprise applications.</p>
+                </div>
+
+                <div class="service-card reveal">
+                    <div class="service-icon">&#128101;</div>
+                    <h3>IT Consulting</h3>
+                    <p>Strategic technology advisory services. Roadmap planning, vendor evaluation, and technology governance.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Projects ===== -->
+    <section class="projects" id="projects">
+        <div class="container">
+            <div class="section-label reveal">Our Work</div>
+            <h2 class="section-heading reveal">Selected Case Studies</h2>
+            <p class="section-desc reveal">Real results from partnerships with industry-leading organizations.</p>
+
+            <div class="projects-grid">
+                <div class="project-card reveal">
+                    <div class="project-bg project-bg-1">
+                        <div class="project-pattern"></div>
+                    </div>
+                    <div class="project-overlay">
+                        <span class="project-tag">Cloud Migration</span>
+                        <div class="project-title">Global Bank Infrastructure Overhaul</div>
+                        <div class="project-desc">Migrated 200+ services to hybrid cloud, reducing operational costs by 40%.</div>
+                    </div>
+                </div>
+
+                <div class="project-card reveal">
+                    <div class="project-bg project-bg-2">
+                        <div class="project-pattern"></div>
+                    </div>
+                    <div class="project-overlay">
+                        <span class="project-tag">Data Platform</span>
+                        <div class="project-title">Real-Time Analytics Engine</div>
+                        <div class="project-desc">Built a real-time data pipeline processing 2M+ events per second for e-commerce.</div>
+                    </div>
+                </div>
+
+                <div class="project-card reveal">
+                    <div class="project-bg project-bg-3">
+                        <div class="project-pattern"></div>
+                    </div>
+                    <div class="project-overlay">
+                        <span class="project-tag">Security</span>
+                        <div class="project-title">Enterprise Zero Trust Framework</div>
+                        <div class="project-desc">Designed and deployed zero-trust architecture across 15,000+ endpoints.</div>
+                    </div>
+                </div>
+
+                <div class="project-card reveal">
+                    <div class="project-bg project-bg-4">
+                        <div class="project-pattern"></div>
+                    </div>
+                    <div class="project-overlay">
+                        <span class="project-tag">Digital Transformation</span>
+                        <div class="project-title">Healthcare Platform Modernization</div>
+                        <div class="project-desc">Replaced legacy EHR system, improving patient data access speed by 300%.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Stats ===== -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item reveal">
+                <div class="stat-number">150<span class="accent">+</span></div>
+                <div class="stat-label">Projects Delivered</div>
+            </div>
+            <div class="stat-item reveal">
+                <div class="stat-number">45<span class="accent">+</span></div>
+                <div class="stat-label">Enterprise Clients</div>
+            </div>
+            <div class="stat-item reveal">
+                <div class="stat-number">98<span class="accent">%</span></div>
+                <div class="stat-label">Client Retention</div>
+            </div>
+            <div class="stat-item reveal">
+                <div class="stat-number">12</div>
+                <div class="stat-label">Years of Excellence</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Team ===== -->
     <section class="team" id="team">
-        <h2 class="section-title">OUR TEAM</h2>
-
-        <div class="team-grid">
-            <div class="team-member scroll-reveal">
-                <div class="member-avatar">AK</div>
-                <div class="member-name">Alex Kim</div>
-                <div class="member-role">Creative Director</div>
+        <div class="container">
+            <div class="team-header">
+                <div class="section-label reveal">Our People</div>
+                <h2 class="section-heading reveal">Leadership Team</h2>
+                <p class="section-desc reveal">Experienced professionals driving innovation and delivering excellence.</p>
             </div>
 
-            <div class="team-member scroll-reveal">
-                <div class="member-avatar">SL</div>
-                <div class="member-name">Sarah Lee</div>
-                <div class="member-role">Strategist</div>
-            </div>
+            <div class="team-grid">
+                <div class="team-card reveal">
+                    <div class="team-avatar avatar-1">JC</div>
+                    <div class="team-name">James Chen</div>
+                    <div class="team-role">CEO & Co-Founder</div>
+                </div>
 
-            <div class="team-member scroll-reveal">
-                <div class="member-avatar">MJ</div>
-                <div class="member-name">Marcus Johnson</div>
-                <div class="member-role">Designer</div>
-            </div>
+                <div class="team-card reveal">
+                    <div class="team-avatar avatar-2">LW</div>
+                    <div class="team-name">Lisa Wang</div>
+                    <div class="team-role">CTO</div>
+                </div>
 
-            <div class="team-member scroll-reveal">
-                <div class="member-avatar">EC</div>
-                <div class="member-name">Emma Chen</div>
-                <div class="member-role">Developer</div>
-            </div>
+                <div class="team-card reveal">
+                    <div class="team-avatar avatar-3">DK</div>
+                    <div class="team-name">David Kim</div>
+                    <div class="team-role">VP of Engineering</div>
+                </div>
 
-            <div class="team-member scroll-reveal">
-                <div class="member-avatar">RP</div>
-                <div class="member-name">Ryan Park</div>
-                <div class="member-role">Motion Designer</div>
-            </div>
+                <div class="team-card reveal">
+                    <div class="team-avatar avatar-4">SR</div>
+                    <div class="team-name">Sarah Rodriguez</div>
+                    <div class="team-role">VP of Strategy</div>
+                </div>
 
-            <div class="team-member scroll-reveal">
-                <div class="member-avatar">ZW</div>
-                <div class="member-name">Zoe Wong</div>
-                <div class="member-role">UX/UI Designer</div>
-            </div>
+                <div class="team-card reveal">
+                    <div class="team-avatar avatar-5">MT</div>
+                    <div class="team-name">Michael Tanaka</div>
+                    <div class="team-role">Head of Security</div>
+                </div>
 
-            <div class="team-member scroll-reveal">
-                <div class="member-avatar">NT</div>
-                <div class="member-name">Nolan Torres</div>
-                <div class="member-role">Producer</div>
-            </div>
-
-            <div class="team-member scroll-reveal">
-                <div class="member-avatar">IS</div>
-                <div class="member-name">Iris Smith</div>
-                <div class="member-role">Copywriter</div>
+                <div class="team-card reveal">
+                    <div class="team-avatar avatar-6">AP</div>
+                    <div class="team-name">Anita Patel</div>
+                    <div class="team-role">Head of Data Science</div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- ===== 聯絡表單 ===== -->
+    <!-- ===== Contact ===== -->
     <section class="contact" id="contact">
-        <div class="contact-wrapper">
-            <h2 class="section-title">GET IN TOUCH</h2>
+        <div class="container">
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <div class="section-label">Contact Us</div>
+                    <h2>Let's Build Something Great Together</h2>
+                    <p>Ready to transform your business? Our team is here to help you navigate the digital landscape and achieve your goals.</p>
 
-            <form class="contact-form">
-                <div class="form-group">
-                    <label for="name">NAME *</label>
-                    <input type="text" id="name" name="name" required>
+                    <div class="contact-detail">
+                        <div class="contact-detail-icon">&#128205;</div>
+                        <div class="contact-detail-text">
+                            <strong>Headquarters</strong>
+                            <span>Taipei 101 Tower, 45F<br>Xinyi District, Taipei City</span>
+                        </div>
+                    </div>
+
+                    <div class="contact-detail">
+                        <div class="contact-detail-icon">&#9993;</div>
+                        <div class="contact-detail-text">
+                            <strong>Email</strong>
+                            <span><a href="mailto:info@ymjtcorp.com">info@ymjtcorp.com</a></span>
+                        </div>
+                    </div>
+
+                    <div class="contact-detail">
+                        <div class="contact-detail-icon">&#128222;</div>
+                        <div class="contact-detail-text">
+                            <strong>Phone</strong>
+                            <span>+886 2 8101 8888</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="email">EMAIL *</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
+                <form class="contact-form" id="contactForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" name="firstName" placeholder="John" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" placeholder="Doe" required>
+                        </div>
+                    </div>
 
-                <div class="form-group">
-                    <label for="company">COMPANY</label>
-                    <input type="text" id="company" name="company">
-                </div>
+                    <div class="form-group">
+                        <label for="emailField">Work Email</label>
+                        <input type="email" id="emailField" name="email" placeholder="john@company.com" required>
+                    </div>
 
-                <div class="form-group">
-                    <label for="project">PROJECT TYPE *</label>
-                    <select id="project" name="project" required>
-                        <option value="">-- SELECT ONE --</option>
-                        <option value="branding">BRANDING</option>
-                        <option value="design">DESIGN</option>
-                        <option value="web">WEB DEVELOPMENT</option>
-                        <option value="campaign">CAMPAIGN</option>
-                        <option value="other">OTHER</option>
-                    </select>
-                </div>
+                    <div class="form-group">
+                        <label for="companyField">Company</label>
+                        <input type="text" id="companyField" name="company" placeholder="Your company name">
+                    </div>
 
-                <div class="form-group">
-                    <label for="message">MESSAGE *</label>
-                    <textarea id="message" name="message" required></textarea>
-                </div>
+                    <div class="form-group">
+                        <label for="serviceField">Service Interest</label>
+                        <select id="serviceField" name="service" required>
+                            <option value="">Select a service</option>
+                            <option value="cloud">Cloud Infrastructure</option>
+                            <option value="digital">Digital Transformation</option>
+                            <option value="data">Data Analytics</option>
+                            <option value="security">Cybersecurity</option>
+                            <option value="dev">Custom Development</option>
+                            <option value="consulting">IT Consulting</option>
+                        </select>
+                    </div>
 
-                <button type="submit" class="form-submit">SEND MESSAGE</button>
-            </form>
+                    <div class="form-group">
+                        <label for="messageField">Message</label>
+                        <textarea id="messageField" name="message" placeholder="Tell us about your project..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="form-submit">Send Message</button>
+                </form>
+            </div>
         </div>
     </section>
 
-    <!-- ===== 頁尾 ===== -->
+    <!-- ===== Footer ===== -->
     <footer>
-        <div class="footer-section">
-            <h4>STUDIO</h4>
-            <ul>
-                <li>San Francisco, CA</li>
-                <li>New York, NY</li>
-                <li>London, UK</li>
-            </ul>
-        </div>
+        <div class="footer-inner">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <div class="logo-icon">YM</div>
+                        <div class="logo-text">YMJT <span>Corp</span></div>
+                    </a>
+                    <p>Young Minds Join Together Corp. Empowering organizations through innovative technology solutions since 2014.</p>
+                </div>
 
-        <div class="footer-section">
-            <h4>CONNECT</h4>
-            <ul>
-                <li><a href="#">Twitter</a></li>
-                <li><a href="#">Instagram</a></li>
-                <li><a href="#">Dribbble</a></li>
-                <li><a href="#">LinkedIn</a></li>
-            </ul>
-        </div>
+                <div class="footer-col">
+                    <h4>Solutions</h4>
+                    <ul>
+                        <li><a href="#services">Cloud Infrastructure</a></li>
+                        <li><a href="#services">Digital Transformation</a></li>
+                        <li><a href="#services">Data Analytics</a></li>
+                        <li><a href="#services">Cybersecurity</a></li>
+                    </ul>
+                </div>
 
-        <div class="footer-section">
-            <h4>HELLO</h4>
-            <ul>
-                <li><a href="mailto:hello@fluxstudio.com">hello@fluxstudio.com</a></li>
-                <li>+1 (415) 555-0123</li>
-            </ul>
-        </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#team">About Us</a></li>
+                        <li><a href="#team">Leadership</a></li>
+                        <li><a href="#projects">Case Studies</a></li>
+                        <li><a href="#contact">Careers</a></li>
+                    </ul>
+                </div>
 
-        <div class="footer-bottom">
-            <div>&copy; 2024 FLUX STUDIO. ALL RIGHTS RESERVED.</div>
-            <div class="footer-social">
-                <a href="#">PRIVACY</a>
-                <a href="#">TERMS</a>
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="report.aspx">Client Portal</a></li>
+                        <li><a href="download.aspx">Document Center</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Support</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div>&copy; 2024 Young Minds Join Together Corp. All rights reserved.</div>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Policy</a>
+                </div>
             </div>
         </div>
     </footer>
 
     <script>
-        // 平滑滾動
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            var header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+            anchor.addEventListener('click', function(e) {
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
+                var target = document.querySelector(this.getAttribute('href'));
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth' });
                 }
             });
         });
 
-        // 滾動顯示效果
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
+        // Scroll reveal animations
+        var revealElements = document.querySelectorAll('.reveal');
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
+                    entry.target.classList.add('visible');
                     observer.unobserve(entry.target);
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-        document.querySelectorAll('.scroll-reveal').forEach(el => {
+        revealElements.forEach(function(el) {
             observer.observe(el);
         });
 
-        // 表單提交
-        document.querySelector('.contact-form').addEventListener('submit', function(e) {
+        // Contact form
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert('MESSAGE SENT. WE WILL GET BACK TO YOU SOON.');
+            alert('Thank you for your message. Our team will get back to you within 24 hours.');
             this.reset();
-        });
-
-        // 滑鼠跟蹤效果（可選）
-        document.addEventListener('mousemove', (e) => {
-            const mouseX = e.clientX / window.innerWidth;
-            const mouseY = e.clientY / window.innerHeight;
-
-            document.querySelectorAll('.case-card').forEach(card => {
-                const offset = 5;
-                card.style.transform = `translate(${(mouseX - 0.5) * offset}px, ${(mouseY - 0.5) * offset}px)`;
-            });
         });
     </script>
 </body>
