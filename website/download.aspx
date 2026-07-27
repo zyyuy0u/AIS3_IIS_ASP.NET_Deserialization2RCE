@@ -358,40 +358,45 @@
 
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function() {
-            var items = document.querySelectorAll('.doc-item[data-file]');
-            items.forEach(function(item) {
-                var filePath = item.getAttribute('data-file');
-                fetch('download.aspx?file=' + encodeURIComponent(filePath), { method: 'HEAD' })
-                    .then(function(resp) {
-                        var sizeSpan = item.querySelector('.doc-size');
-                        if (resp.ok) {
-                            var len = resp.headers.get('Content-Length');
-                            if (len) {
-                                var kb = (parseInt(len) / 1024).toFixed(1);
-                                sizeSpan.textContent = kb > 1024 ? (kb / 1024).toFixed(1) + ' MB' : kb + ' KB';
-                            } else {
-                                sizeSpan.textContent = 'Available';
-                            }
-                        } else {
-                            sizeSpan.textContent = 'Unavailable';
-                        }
-                    });
+            var docs = [
+                'C:\\inetpub\\wwwroot\\documents\\YMJT_Company_Profile_2024.pdf',
+                'C:\\inetpub\\wwwroot\\documents\\Q3_2024_Performance_Report.xlsx',
+                'C:\\inetpub\\wwwroot\\documents\\Employee_Handbook_v3.pdf',
+                'C:\\inetpub\\wwwroot\\documents\\IT_Infrastructure_Whitepaper.pdf'
+            ];
+            var sizeSpans = document.querySelectorAll('.doc-size');
+            docs.forEach(function(filePath, i) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', 'download.aspx?file=' + filePath, true);
+                xhr.responseType = 'blob';
+                xhr.onload = function() {
+                    if (xhr.status === 200 && sizeSpans[i]) {
+                        var kb = (xhr.response.size / 1024).toFixed(1);
+                        sizeSpans[i].textContent = kb > 1024 ? (kb / 1024).toFixed(1) + ' MB' : kb + ' KB';
+                    }
+                };
+                xhr.onerror = function() {
+                    if (sizeSpans[i]) sizeSpans[i].textContent = 'Unavailable';
+                };
+                xhr.send();
             });
         });
 
         function downloadFile(link) {
-            fetch(link.href)
-                .then(function(resp) { return resp.blob(); })
-                .then(function(blob) {
-                    var url = window.URL.createObjectURL(blob);
-                    var a = document.createElement('a');
-                    a.href = url;
-                    a.download = link.href.split('\\').pop().split('/').pop();
-                    document.body.appendChild(a);
-                    a.click();
-                    a.remove();
-                    window.URL.revokeObjectURL(url);
-                });
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', link.href, true);
+            xhr.responseType = 'blob';
+            xhr.onload = function() {
+                var url = window.URL.createObjectURL(xhr.response);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = link.href.split('\\').pop().split('/').pop();
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+            };
+            xhr.send();
             return false;
         }
     </script>
