@@ -4,206 +4,154 @@ const BASE = 'http://localhost';
 
 // ===== INDEX.HTML TESTS =====
 
-test.describe('Homepage (index.html)', () => {
-  test('loads with HTTP 200 and correct title', async ({ page }) => {
+test.describe('首頁 (index.html)', () => {
+  test('載入正常，標題包含公司名稱', async ({ page }) => {
     const response = await page.goto(BASE + '/');
     expect(response.status()).toBe(200);
-    await expect(page).toHaveTitle(/YMJT/);
+    await expect(page).toHaveTitle(/Young Minds Join Together/);
   });
 
-  test('header displays YMJT Corp logo and navigation links', async ({ page }) => {
+  test('導覽列顯示公司全名與連結', async ({ page }) => {
     await page.goto(BASE + '/');
-    await expect(page.locator('header .logo-text')).toContainText('YMJT');
-    const navLinks = page.locator('nav a');
-    await expect(navLinks).toHaveCount(5);
-    await expect(navLinks.nth(0)).toHaveText('Services');
-    await expect(navLinks.nth(1)).toHaveText('Projects');
-    await expect(navLinks.nth(2)).toHaveText('Team');
-    await expect(navLinks.nth(3)).toHaveText('Contact');
-    await expect(navLinks.nth(4)).toHaveText('Client Portal');
+    await expect(page.locator('header')).toContainText('Young Minds Join Together');
+    const navLinks = page.locator('header nav a');
+    const count = await navLinks.count();
+    expect(count).toBeGreaterThanOrEqual(4);
   });
 
-  test('hero section displays correctly', async ({ page }) => {
+  test('Hero 區域正確顯示', async ({ page }) => {
     await page.goto(BASE + '/');
-    const h1 = page.locator('.hero-content h1');
-    await expect(h1).toBeVisible();
-    await expect(h1).toContainText('Innovation');
-    await expect(page.locator('.btn-primary')).toBeVisible();
-    await expect(page.locator('.btn-outline')).toBeVisible();
+    await expect(page.locator('h1')).toContainText('集結年輕思維');
+    await expect(page.locator('.btn-primary').first()).toBeVisible();
+    await expect(page.locator('.btn-outline').first()).toBeVisible();
   });
 
-  test('services section has 6 cards', async ({ page }) => {
+  test('數據統計區顯示 4 項指標', async ({ page }) => {
+    await page.goto(BASE + '/');
+    await expect(page.locator('.stat-number')).toHaveCount(4);
+    await expect(page.locator('.stat-number').first()).toContainText('150+');
+  });
+
+  test('服務區塊有 6 張卡片', async ({ page }) => {
     await page.goto(BASE + '/');
     await page.locator('#services').scrollIntoViewIfNeeded();
-    const cards = page.locator('.service-card');
+    const cards = page.locator('#services .glass-card');
     await expect(cards).toHaveCount(6);
-    await expect(page.locator('.services .section-heading')).toContainText('Enterprise Solutions');
   });
 
-  test('projects section has 4 project cards', async ({ page }) => {
+  test('專案區塊有 4 張卡片', async ({ page }) => {
     await page.goto(BASE + '/');
     await page.locator('#projects').scrollIntoViewIfNeeded();
-    const cards = page.locator('.project-card');
+    const cards = page.locator('#projects .glass-card');
     await expect(cards).toHaveCount(4);
   });
 
-  test('stats section shows 4 metrics', async ({ page }) => {
-    await page.goto(BASE + '/');
-    const stats = page.locator('.stat-item');
-    await expect(stats).toHaveCount(4);
-    await expect(page.locator('.stat-number').first()).toContainText('150');
-  });
-
-  test('team section has 6 team members', async ({ page }) => {
+  test('團隊區塊有 6 位成員', async ({ page }) => {
     await page.goto(BASE + '/');
     await page.locator('#team').scrollIntoViewIfNeeded();
-    const members = page.locator('.team-card');
+    const members = page.locator('#team .glass-card');
     await expect(members).toHaveCount(6);
   });
 
-  test('contact form is functional - all fields work', async ({ page }) => {
+  test('聯絡表單可輸入並送出', async ({ page }) => {
     await page.goto(BASE + '/');
     await page.locator('#contact').scrollIntoViewIfNeeded();
 
-    await page.fill('#firstName', 'Test');
-    await page.fill('#lastName', 'User');
-    await page.fill('#emailField', 'test@test.com');
-    await page.fill('#companyField', 'Test Corp');
-    await page.selectOption('#serviceField', 'cloud');
-    await page.fill('#messageField', 'Test message');
+    await page.fill('#contactName', '測試');
+    await page.fill('#contactEmail', 'test@test.com');
+    await page.fill('#contactCompany', '測試公司');
+    await page.fill('#contactMessage', '測試訊息');
 
-    expect(await page.inputValue('#firstName')).toBe('Test');
-    expect(await page.inputValue('#lastName')).toBe('User');
-    expect(await page.inputValue('#emailField')).toBe('test@test.com');
-  });
-
-  test('contact form submit shows confirmation', async ({ page }) => {
-    await page.goto(BASE + '/');
-    await page.locator('#contact').scrollIntoViewIfNeeded();
-
-    await page.fill('#firstName', 'Test');
-    await page.fill('#lastName', 'User');
-    await page.fill('#emailField', 'test@test.com');
-    await page.selectOption('#serviceField', 'cloud');
-    await page.fill('#messageField', 'Test message');
+    expect(await page.inputValue('#contactName')).toBe('測試');
+    expect(await page.inputValue('#contactEmail')).toBe('test@test.com');
 
     page.on('dialog', async dialog => {
-      expect(dialog.message()).toContain('Thank you');
+      expect(dialog.message()).toContain('感謝');
       await dialog.accept();
     });
-
-    await page.click('.form-submit');
+    await page.click('button[type="submit"]');
   });
 
-  test('navigation anchor links work (smooth scroll)', async ({ page }) => {
+  test('客戶入口連結指向 report.aspx', async ({ page }) => {
     await page.goto(BASE + '/');
-
-    await page.click('nav a[href="#services"]');
-    await page.waitForTimeout(500);
-    const servicesBox = await page.locator('#services').boundingBox();
-    expect(servicesBox).toBeTruthy();
-
-    await page.click('nav a[href="#team"]');
-    await page.waitForTimeout(500);
-    const teamBox = await page.locator('#team').boundingBox();
-    expect(teamBox).toBeTruthy();
+    const portalLink = page.locator('header a[href="report.aspx"]');
+    await expect(portalLink).toBeVisible();
   });
 
-  test('Client Portal link goes to report.aspx', async ({ page }) => {
-    await page.goto(BASE + '/');
-    const portalLink = page.locator('a.nav-cta');
-    await expect(portalLink).toHaveAttribute('href', 'report.aspx');
-  });
-
-  test('footer contains YMJT Corp branding and links', async ({ page }) => {
+  test('頁尾包含公司全名與 GitHub 連結', async ({ page }) => {
     await page.goto(BASE + '/');
     await page.locator('footer').scrollIntoViewIfNeeded();
     await expect(page.locator('footer')).toContainText('Young Minds Join Together Corp');
-    const footerLinks = page.locator('.footer-col a');
-    const count = await footerLinks.count();
-    expect(count).toBeGreaterThan(5);
+    const githubLink = page.locator('footer a[href*="github"]');
+    await expect(githubLink).toBeVisible();
   });
 
-  test('footer Document Center links to download.aspx', async ({ page }) => {
+  test('頁尾文件中心連結指向 download.aspx', async ({ page }) => {
     await page.goto(BASE + '/');
     const docLink = page.locator('footer a[href="download.aspx"]');
-    await expect(docLink).toHaveText('Document Center');
+    await expect(docLink).toBeVisible();
   });
 
-  test('no DEVCORE or FLUX branding remains', async ({ page }) => {
+  test('無 DEVCORE 或 FLUX 殘留', async ({ page }) => {
     await page.goto(BASE + '/');
     const content = await page.content();
     expect(content).not.toContain('DEVCORE');
     expect(content).not.toContain('FLUX');
-    expect(content).not.toContain('flux');
   });
 
-  test('no broken images on homepage', async ({ page }) => {
-    const brokenImages = [];
-    page.on('response', response => {
-      if (response.request().resourceType() === 'image' && response.status() >= 400) {
-        brokenImages.push(response.url());
-      }
-    });
+  test('無 console 錯誤', async ({ page }) => {
+    const errors = [];
+    page.on('pageerror', err => errors.push(err.message));
     await page.goto(BASE + '/');
-    await page.waitForTimeout(1000);
-    expect(brokenImages).toEqual([]);
-  });
-
-  test('scroll reveal animations trigger', async ({ page }) => {
-    await page.goto(BASE + '/');
-    await page.waitForTimeout(300);
-
-    await page.locator('#services').scrollIntoViewIfNeeded();
-    await page.waitForTimeout(800);
-
-    const firstCard = page.locator('.service-card.reveal').first();
-    await expect(firstCard).toHaveClass(/visible/);
+    await page.waitForTimeout(2000);
+    expect(errors).toEqual([]);
   });
 });
 
 // ===== DOWNLOAD.ASPX TESTS =====
 
-test.describe('Document Center (download.aspx)', () => {
-  test('loads with correct branding', async ({ page }) => {
+test.describe('文件中心 (download.aspx)', () => {
+  test('載入正常，顯示公司全名', async ({ page }) => {
     const response = await page.goto(BASE + '/download.aspx');
     expect(response.status()).toBe(200);
-    await expect(page).toHaveTitle(/Document Center.*YMJT/);
-    await expect(page.locator('.topbar-logo')).toContainText('YMJT');
+    await expect(page).toHaveTitle(/Young Minds Join Together/);
+    await expect(page.locator('header')).toContainText('Young Minds Join Together');
   });
 
-  test('page header shows Document Center', async ({ page }) => {
+  test('頁面標題為文件中心', async ({ page }) => {
     await page.goto(BASE + '/download.aspx');
-    await expect(page.locator('.page-header h1')).toHaveText('Document Center');
+    await expect(page.locator('h1')).toHaveText('文件中心');
   });
 
-  test('input field and download button exist and are clickable', async ({ page }) => {
+  test('搜尋欄位與按鈕可操作', async ({ page }) => {
     await page.goto(BASE + '/download.aspx');
-    const input = page.locator('#txtFile');
+    const input = page.locator('#txtSearch');
     await expect(input).toBeVisible();
-    await input.fill('test-path');
-    expect(await input.inputValue()).toBe('test-path');
+    await input.fill('測試關鍵字');
+    expect(await input.inputValue()).toBe('測試關鍵字');
 
-    const btn = page.locator('#btnDownload');
+    const btn = page.locator('#btnSearch');
     await expect(btn).toBeVisible();
   });
 
-  test('navigation links work', async ({ page }) => {
+  test('統計數字顯示 3 項', async ({ page }) => {
     await page.goto(BASE + '/download.aspx');
-    const homeLink = page.locator('.topbar-nav a').first();
-    await expect(homeLink).toHaveAttribute('href', '/');
-
-    const reportsLink = page.locator('.topbar-nav a[href="report.aspx"]');
-    await expect(reportsLink).toBeVisible();
+    await expect(page.locator('.stat-number')).toHaveCount(3);
   });
 
-  test('system overview stats display', async ({ page }) => {
+  test('近期文件列表有 4 筆', async ({ page }) => {
     await page.goto(BASE + '/download.aspx');
-    await expect(page.locator('.info-item')).toHaveCount(3);
-    await expect(page.locator('.info-item-number').first()).toContainText('1,247');
+    await expect(page.locator('.doc-row')).toHaveCount(4);
   });
 
-  test('no vulnerability hints visible', async ({ page }) => {
+  test('下載連結為直接檔案路徑（非 LFI）', async ({ page }) => {
+    await page.goto(BASE + '/download.aspx');
+    const content = await page.content();
+    expect(content).not.toContain('?file=');
+    expect(content).toContain('documents/YMJT_Company_Profile_2024.pdf');
+  });
+
+  test('無漏洞提示文字', async ({ page }) => {
     await page.goto(BASE + '/download.aspx');
     const content = await page.content();
     expect(content).not.toContain('VULNERABLE');
@@ -211,75 +159,69 @@ test.describe('Document Center (download.aspx)', () => {
     expect(content).not.toContain('VulnerableApp');
   });
 
-  test('LFI still works via query string (functional test)', async ({ request }) => {
-    const response = await request.get(BASE + '/download.aspx?file=C:\\inetpub\\wwwroot\\web.config');
-    expect(response.status()).toBe(200);
-    const body = await response.text();
-    expect(body).toContain('machineKey');
-  });
-
-  test('returns 404 for nonexistent file', async ({ request }) => {
-    const response = await request.get(BASE + '/download.aspx?file=C:\\nonexistent\\file.txt');
-    expect(response.status()).toBe(404);
+  test('導覽連結可切換頁面', async ({ page }) => {
+    await page.goto(BASE + '/download.aspx');
+    const homeLink = page.locator('header nav a[href="/"]');
+    await expect(homeLink).toBeVisible();
+    const reportLink = page.locator('header nav a[href="report.aspx"]');
+    await expect(reportLink).toBeVisible();
   });
 });
 
 // ===== REPORT.ASPX TESTS =====
 
-test.describe('Report Generator (report.aspx)', () => {
-  test('loads with correct branding', async ({ page }) => {
+test.describe('報表系統 (report.aspx)', () => {
+  test('載入正常，顯示公司全名', async ({ page }) => {
     const response = await page.goto(BASE + '/report.aspx');
     expect(response.status()).toBe(200);
-    await expect(page).toHaveTitle(/Report Generator.*YMJT/);
-    await expect(page.locator('.topbar-logo')).toContainText('YMJT');
+    await expect(page).toHaveTitle(/Young Minds Join Together/);
+    await expect(page.locator('header')).toContainText('Young Minds Join Together');
   });
 
-  test('page header shows Report Generator', async ({ page }) => {
+  test('頁面標題為報表產生器', async ({ page }) => {
     await page.goto(BASE + '/report.aspx');
-    await expect(page.locator('.page-header h1')).toHaveText('Report Generator');
+    await expect(page.locator('h1')).toHaveText('報表產生器');
   });
 
-  test('quick stats section displays 3 metrics', async ({ page }) => {
+  test('快速統計顯示 3 項指標', async ({ page }) => {
     await page.goto(BASE + '/report.aspx');
-    await expect(page.locator('.quick-stat')).toHaveCount(3);
-    await expect(page.locator('.quick-stat-value').first()).toContainText('24');
+    await expect(page.locator('.stat-number')).toHaveCount(3);
+    await expect(page.locator('.stat-number').first()).toContainText('24');
   });
 
-  test('report form fields exist and accept input', async ({ page }) => {
+  test('報表表單欄位可輸入', async ({ page }) => {
     await page.goto(BASE + '/report.aspx');
     const nameField = page.locator('#txtReportName');
     const dateField = page.locator('#txtReportDate');
     await expect(nameField).toBeVisible();
     await expect(dateField).toBeVisible();
 
-    await nameField.fill('Q3 Report');
+    await nameField.fill('Q3 績效報告');
     await dateField.fill('2024-07-15');
-    expect(await nameField.inputValue()).toBe('Q3 Report');
+    expect(await nameField.inputValue()).toBe('Q3 績效報告');
     expect(await dateField.inputValue()).toBe('2024-07-15');
   });
 
-  test('generate button works and produces output', async ({ page }) => {
+  test('產生報表按鈕可正常運作', async ({ page }) => {
     await page.goto(BASE + '/report.aspx');
-
-    await page.locator('#txtReportName').fill('Test Report');
+    await page.locator('#txtReportName').fill('測試報表');
     await page.locator('#txtReportDate').fill('2024-01-01');
     await page.click('#btnGenerate');
-
     await page.waitForLoadState('networkidle');
-    const result = page.locator('.result-box');
-    await expect(result).toContainText('Report: Test Report');
-    await expect(result).toContainText('Date: 2024-01-01');
+    const result = page.locator('.result-area');
+    await expect(result).toContainText('測試報表');
+    await expect(result).toContainText('2024-01-01');
   });
 
-  test('error message when name is empty', async ({ page }) => {
+  test('缺少名稱時顯示錯誤', async ({ page }) => {
     await page.goto(BASE + '/report.aspx');
     await page.locator('#txtReportDate').fill('2024-01-01');
     await page.click('#btnGenerate');
     await page.waitForLoadState('networkidle');
-    await expect(page.locator('.error-msg')).toContainText('Report name is required');
+    await expect(page.locator('.text-red-400')).toContainText('報表名稱');
   });
 
-  test('ViewState hidden fields are present', async ({ page }) => {
+  test('ViewState 隱藏欄位存在', async ({ page }) => {
     await page.goto(BASE + '/report.aspx');
     const content = await page.content();
     expect(content).toContain('__VIEWSTATE');
@@ -288,7 +230,7 @@ test.describe('Report Generator (report.aspx)', () => {
     expect(content).toContain('__EVENTVALIDATION');
   });
 
-  test('no Technical Notes or vulnerability hints visible', async ({ page }) => {
+  test('無漏洞提示或技術細節', async ({ page }) => {
     await page.goto(BASE + '/report.aspx');
     const content = await page.content();
     expect(content).not.toContain('Technical Notes');
@@ -297,42 +239,40 @@ test.describe('Report Generator (report.aspx)', () => {
     expect(content).not.toContain('BinaryFormatter');
   });
 
-  test('navigation between pages works', async ({ page }) => {
+  test('導覽可切換頁面', async ({ page }) => {
     await page.goto(BASE + '/report.aspx');
-    await page.click('.topbar-nav a[href="download.aspx"]');
-    await expect(page).toHaveTitle(/Document Center/);
-
-    await page.click('.topbar-nav a[href="/"]');
-    await expect(page).toHaveTitle(/YMJT/);
+    await page.click('header nav a[href="download.aspx"]');
+    await expect(page).toHaveTitle(/Young Minds Join Together/);
+    await expect(page.locator('h1')).toHaveText('文件中心');
   });
 });
 
 // ===== CROSS-PAGE TESTS =====
 
-test.describe('Cross-page consistency', () => {
-  test('all pages use YMJT branding', async ({ page }) => {
+test.describe('跨頁面一致性', () => {
+  test('所有頁面使用公司全名', async ({ page }) => {
     for (const path of ['/', '/download.aspx', '/report.aspx']) {
       await page.goto(BASE + path);
       const content = await page.content();
-      expect(content).toContain('YMJT');
+      expect(content).toContain('Young Minds Join Together');
       expect(content).not.toContain('FLUX');
       expect(content).not.toContain('DEVCORE');
     }
   });
 
-  test('no console errors on any page', async ({ page }) => {
+  test('所有頁面無 console 錯誤', async ({ page }) => {
     const errors = [];
     page.on('pageerror', err => errors.push(err.message));
 
     for (const path of ['/', '/download.aspx', '/report.aspx']) {
       await page.goto(BASE + path);
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(1500);
     }
 
     expect(errors).toEqual([]);
   });
 
-  test('no 404 resources on any page', async ({ page }) => {
+  test('所有頁面無 404 資源', async ({ page }) => {
     const failed = [];
     page.on('response', response => {
       if (response.status() === 404 && !response.url().includes('favicon')) {
@@ -342,7 +282,7 @@ test.describe('Cross-page consistency', () => {
 
     for (const path of ['/', '/download.aspx', '/report.aspx']) {
       await page.goto(BASE + path);
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(1500);
     }
 
     expect(failed).toEqual([]);

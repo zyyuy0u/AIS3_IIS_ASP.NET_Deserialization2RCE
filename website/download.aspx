@@ -1,454 +1,214 @@
 <%@ Page Language="C#" EnableViewState="false" %>
-<%@ Import Namespace="System.IO" %>
 
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="zh-Hant">
 <head runat="server">
-    <title>Document Center - YMJT Corp</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文件中心 — Young Minds Join Together Corp</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <style type="text/tailwindcss">
+        @theme {
+            --color-navy: #0a1628;
+            --color-navy-light: #111d32;
+            --color-accent: #2563eb;
+            --color-teal: #06b6d4;
+            --color-gold: #d4a574;
+        }
+    </style>
     <style>
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --navy: #0c1b2a;
-            --blue-accent: #2563eb;
-            --teal: #0ea5e9;
-            --white: #ffffff;
-            --gray-50: #f8fafc;
-            --gray-100: #f1f5f9;
-            --gray-200: #e2e8f0;
-            --gray-400: #94a3b8;
-            --gray-500: #64748b;
-            --gray-700: #334155;
-            --gray-800: #1e293b;
-            --gold: #d4a574;
-            --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        html { scroll-behavior: smooth; }
+        body { background: #0a1628; }
+        .glass {
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.06);
         }
-        body { font-family: var(--font); background: var(--navy); color: rgba(255,255,255,0.9); line-height: 1.6; }
-
-        .topbar {
-            background: var(--navy);
-            padding: 0 2rem;
-            height: 56px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .topbar-logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--white);
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1rem;
-        }
-        .topbar-logo-icon {
-            width: 32px; height: 32px;
-            background: linear-gradient(135deg, var(--blue-accent), var(--teal));
-            border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 12px; font-weight: 800; color: #fff;
-        }
-        .topbar-logo span { color: var(--gold); }
-        .topbar-nav { display: flex; gap: 1.5rem; }
-        .topbar-nav a {
-            color: rgba(255,255,255,0.6); text-decoration: none;
-            font-size: 0.8rem; font-weight: 500; transition: color 0.2s;
-        }
-        .topbar-nav a:hover { color: #fff; }
-        .topbar-nav a.active { color: var(--teal); }
-
-        .page-header {
-            background: linear-gradient(135deg, var(--navy), #1e3a5f);
-            padding: 3rem 2rem 2.5rem;
-            color: #fff;
-        }
-        .page-header-inner { max-width: 900px; margin: 0 auto; }
-        .page-header h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
-        .page-header p { font-size: 0.95rem; color: rgba(255,255,255,0.6); }
-
-        .main { max-width: 900px; margin: -1.5rem auto 3rem; padding: 0 2rem; position: relative; z-index: 1; }
-
-        .card {
+        .glass-card {
             background: rgba(255,255,255,0.04);
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.08);
-            padding: 2rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.07);
+            transition: all 0.3s;
         }
-
-        .card h2 {
-            font-size: 1.1rem; font-weight: 700; color: var(--white);
-            margin-bottom: 0.5rem;
-            display: flex; align-items: center; gap: 8px;
+        .glass-card:hover {
+            background: rgba(255,255,255,0.07);
+            border-color: rgba(37,99,235,0.2);
         }
-
-        .card-desc {
-            font-size: 0.875rem; color: rgba(255,255,255,0.5);
-            margin-bottom: 1.5rem;
+        .glow-line {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(37,99,235,0.5), rgba(6,182,212,0.5), transparent);
         }
-
-        .input-group {
-            display: flex; gap: 0.75rem; align-items: flex-start;
+        .icon-box {
+            background: linear-gradient(135deg, rgba(37,99,235,0.15), rgba(6,182,212,0.1));
+            border: 1px solid rgba(37,99,235,0.2);
         }
-        .input-group input[type="text"] {
-            flex: 1;
-            padding: 12px 16px;
-            border: 1.5px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
-            font-family: var(--font);
-            font-size: 0.925rem;
-            outline: none;
-            transition: border-color 0.2s;
-            background: rgba(255,255,255,0.06);
-            color: rgba(255,255,255,0.9);
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #0ea5e9);
+            transition: all 0.3s;
         }
-        .input-group input[type="text"]:focus {
-            border-color: var(--teal);
-            box-shadow: 0 0 0 3px rgba(14,165,233,0.15);
+        .btn-primary:hover {
+            box-shadow: 0 8px 30px rgba(37,99,235,0.4);
+            transform: translateY(-2px);
         }
-        .input-group input[type="submit"],
-        .input-group button {
-            padding: 12px 24px;
-            background: linear-gradient(135deg, var(--blue-accent), var(--teal));
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-family: var(--font);
-            font-size: 0.875rem;
-            font-weight: 600;
-            cursor: pointer;
+        .doc-row {
             transition: all 0.2s;
-            white-space: nowrap;
         }
-        .input-group input[type="submit"]:hover,
-        .input-group button:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(37,99,235,0.3);
-        }
-
-        .status-msg {
-            margin-top: 1rem;
-            padding: 10px 14px;
-            background: rgba(220,38,38,0.1);
-            color: #f87171;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            border: 1px solid rgba(220,38,38,0.2);
-        }
-
-        .info-section {
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid rgba(255,255,255,0.08);
-        }
-        .info-section h3 {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: rgba(255,255,255,0.4);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 1rem;
-        }
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-        }
-        .info-item {
-            padding: 1rem;
-            background: rgba(255,255,255,0.04);
-            border-radius: 8px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.06);
-        }
-        .info-item-number {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--teal);
-        }
-        .info-item-label {
-            font-size: 0.75rem;
-            color: rgba(255,255,255,0.4);
-            margin-top: 0.25rem;
-        }
-
-        .card + .card { margin-top: 1.5rem; }
-
-        .doc-list { list-style: none; }
-        .doc-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1rem 1.25rem;
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 8px;
-            margin-bottom: 0.75rem;
-            transition: all 0.15s;
-        }
-        .doc-item:hover {
+        .doc-row:hover {
             background: rgba(255,255,255,0.04);
             border-color: rgba(255,255,255,0.12);
         }
-        .doc-item:last-child { margin-bottom: 0; }
-        .doc-meta {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .dl-btn {
+            background: rgba(6,182,212,0.1);
+            border: 1px solid rgba(6,182,212,0.2);
+            color: #06b6d4;
+            transition: all 0.2s;
         }
-        .doc-icon {
-            width: 40px; height: 40px;
-            border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem;
-            flex-shrink: 0;
+        .dl-btn:hover {
+            background: #06b6d4;
+            color: #0a1628;
+            border-color: #06b6d4;
         }
-        .doc-icon.pdf { background: rgba(220,38,38,0.15); color: #f87171; }
-        .doc-icon.xlsx { background: rgba(22,163,74,0.15); color: #4ade80; }
-        .doc-name {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--white);
-        }
-        .doc-info {
-            font-size: 0.75rem;
-            color: rgba(255,255,255,0.35);
-            margin-top: 2px;
-        }
-        .doc-download {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 16px;
-            background: rgba(14,165,233,0.1);
-            color: var(--teal);
-            border: 1px solid rgba(14,165,233,0.2);
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.15s;
-            white-space: nowrap;
-        }
-        .doc-download:hover {
-            background: var(--teal);
-            color: var(--navy);
-            border-color: var(--teal);
-        }
-
-        .footer-mini {
-            text-align: center;
-            padding: 2rem;
-            font-size: 0.8rem;
-            color: rgba(255,255,255,0.3);
-        }
-
-        @media (max-width: 640px) {
-            .input-group { flex-direction: column; }
-            .info-grid { grid-template-columns: 1fr; }
-            .doc-item { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+        .stat-number {
+            background: linear-gradient(180deg, #ffffff, rgba(255,255,255,0.6));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
     </style>
 </head>
-<body>
-    <div class="topbar">
-        <a href="/" class="topbar-logo">
-            <div class="topbar-logo-icon">YM</div>
-            YMJT <span>Corp</span>
-        </a>
-        <div class="topbar-nav">
-            <a href="/">Home</a>
-            <a href="report.aspx">Reports</a>
-            <a href="download.aspx" class="active">Documents</a>
+<body class="text-white/90 font-sans antialiased overflow-x-hidden">
+
+    <!-- Navigation -->
+    <header class="fixed top-0 w-full z-50 glass">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="/" class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-accent to-teal flex items-center justify-center text-xs font-black text-white">YM</div>
+                <span class="font-bold text-base tracking-tight">Young Minds Join Together <span class="text-gold">Corp</span></span>
+            </a>
+            <nav class="hidden md:flex items-center gap-8">
+                <a href="/" class="text-sm text-white/60 hover:text-white transition-colors">首頁</a>
+                <a href="report.aspx" class="text-sm text-white/60 hover:text-white transition-colors">報表系統</a>
+                <a href="download.aspx" class="text-sm text-teal font-semibold">文件中心</a>
+            </nav>
         </div>
-    </div>
+    </header>
 
-    <div class="page-header">
-        <div class="page-header-inner">
-            <h1>Document Center</h1>
-            <p>Access and download internal resources, templates, and project documentation.</p>
+    <!-- Page Header -->
+    <section class="pt-28 pb-12 bg-gradient-to-b from-navy via-navy-light/50 to-navy">
+        <div class="max-w-5xl mx-auto px-6" data-aos="fade-up">
+            <div class="text-xs font-semibold tracking-widest text-teal uppercase mb-3">Document Center</div>
+            <h1 class="text-3xl lg:text-4xl font-bold mb-3">文件中心</h1>
+            <p class="text-white/40 text-base">存取公司內部資源、範本文件與專案文件。</p>
         </div>
-    </div>
+    </section>
 
-    <div class="main">
-        <form id="form1" runat="server">
-            <div class="card">
-                <h2>&#128196; Retrieve Document</h2>
-                <div class="card-desc">Enter the document path to download files from the server.</div>
+    <div class="glow-line"></div>
 
-                <div class="input-group">
-                    <input type="text" id="txtFile" runat="server" placeholder="Enter document path..." />
-                    <asp:Button ID="btnDownload" runat="server" Text="Download" OnClick="btnDownload_Click" />
+    <!-- Main Content -->
+    <div class="max-w-5xl mx-auto px-6 py-12 space-y-8">
+
+        <!-- Stats -->
+        <div class="grid grid-cols-3 gap-4" data-aos="fade-up">
+            <div class="glass-card rounded-2xl p-6 text-center">
+                <div class="text-3xl font-black stat-number mb-1">1,247</div>
+                <div class="text-xs text-white/35">文件總數</div>
+            </div>
+            <div class="glass-card rounded-2xl p-6 text-center">
+                <div class="text-3xl font-black stat-number mb-1">89</div>
+                <div class="text-xs text-white/35">進行中專案</div>
+            </div>
+            <div class="glass-card rounded-2xl p-6 text-center">
+                <div class="text-3xl font-black stat-number mb-1">24/7</div>
+                <div class="text-xs text-white/35">服務可用性</div>
+            </div>
+        </div>
+
+        <!-- Search -->
+        <div class="glass-card rounded-2xl p-8" data-aos="fade-up" data-aos-delay="100">
+            <h2 class="text-lg font-bold mb-1 flex items-center gap-2">&#128269; 搜尋文件</h2>
+            <p class="text-sm text-white/35 mb-6">輸入關鍵字快速搜尋公司內部文件。</p>
+            <form id="form1" runat="server">
+                <div class="flex gap-3">
+                    <input type="text" id="txtSearch" runat="server" placeholder="輸入文件名稱或關鍵字..." class="flex-1 px-5 py-3.5 rounded-xl bg-white/5 border border-white/10 text-sm text-white placeholder-white/25 outline-none focus:border-teal/50 focus:ring-1 focus:ring-teal/20 transition-all">
+                    <asp:Button ID="btnSearch" runat="server" Text="搜尋" OnClick="btnSearch_Click" CssClass="btn-primary px-8 py-3.5 rounded-xl text-sm font-semibold text-white cursor-pointer" />
                 </div>
+                <asp:Label ID="lblStatus" runat="server" CssClass="block mt-4 text-sm text-red-400" Visible="false"></asp:Label>
+            </form>
+        </div>
 
-                <asp:Label ID="lblStatus" runat="server" ForeColor="Red" CssClass="status-msg" Visible="false"></asp:Label>
+        <!-- Recent Documents -->
+        <div class="glass-card rounded-2xl p-8" data-aos="fade-up" data-aos-delay="200">
+            <h2 class="text-lg font-bold mb-1 flex items-center gap-2">&#128203; 近期文件</h2>
+            <p class="text-sm text-white/35 mb-6">常用資源與最新上傳的文件。</p>
 
-                <div class="info-section">
-                    <h3>System Overview</h3>
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <div class="info-item-number">1,247</div>
-                            <div class="info-item-label">Total Documents</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-item-number">89</div>
-                            <div class="info-item-label">Active Projects</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-item-number">24/7</div>
-                            <div class="info-item-label">Availability</div>
+            <div class="space-y-3">
+                <div class="doc-row flex items-center justify-between p-4 rounded-xl border border-white/6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-lg" style="background:rgba(220,38,38,0.12);color:#f87171">&#128196;</div>
+                        <div>
+                            <div class="text-sm font-semibold">YMJT_Company_Profile_2024.pdf</div>
+                            <div class="text-xs text-white/30 mt-0.5">更新於 2024/07/15 · 2.4 MB</div>
                         </div>
                     </div>
+                    <a href="documents/YMJT_Company_Profile_2024.pdf" class="dl-btn px-4 py-2 rounded-lg text-xs font-semibold no-underline">&#11015; 下載</a>
+                </div>
+                <div class="doc-row flex items-center justify-between p-4 rounded-xl border border-white/6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-lg" style="background:rgba(22,163,74,0.12);color:#4ade80">&#128202;</div>
+                        <div>
+                            <div class="text-sm font-semibold">Q3_2024_Performance_Report.xlsx</div>
+                            <div class="text-xs text-white/30 mt-0.5">更新於 2024/07/10 · 856 KB</div>
+                        </div>
+                    </div>
+                    <a href="documents/Q3_2024_Performance_Report.xlsx" class="dl-btn px-4 py-2 rounded-lg text-xs font-semibold no-underline">&#11015; 下載</a>
+                </div>
+                <div class="doc-row flex items-center justify-between p-4 rounded-xl border border-white/6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-lg" style="background:rgba(220,38,38,0.12);color:#f87171">&#128196;</div>
+                        <div>
+                            <div class="text-sm font-semibold">Employee_Handbook_v3.pdf</div>
+                            <div class="text-xs text-white/30 mt-0.5">更新於 2024/06/28 · 5.1 MB</div>
+                        </div>
+                    </div>
+                    <a href="documents/Employee_Handbook_v3.pdf" class="dl-btn px-4 py-2 rounded-lg text-xs font-semibold no-underline">&#11015; 下載</a>
+                </div>
+                <div class="doc-row flex items-center justify-between p-4 rounded-xl border border-white/6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-lg" style="background:rgba(220,38,38,0.12);color:#f87171">&#128196;</div>
+                        <div>
+                            <div class="text-sm font-semibold">IT_Infrastructure_Whitepaper.pdf</div>
+                            <div class="text-xs text-white/30 mt-0.5">更新於 2024/06/20 · 3.7 MB</div>
+                        </div>
+                    </div>
+                    <a href="documents/IT_Infrastructure_Whitepaper.pdf" class="dl-btn px-4 py-2 rounded-lg text-xs font-semibold no-underline">&#11015; 下載</a>
                 </div>
             </div>
-        </form>
-
-        <div class="card">
-            <h2>&#128203; Recent Documents</h2>
-            <div class="card-desc">Frequently accessed resources and latest uploads.</div>
-
-            <ul class="doc-list" id="docList">
-                <li class="doc-item" data-file="C:\inetpub\wwwroot\documents\YMJT_Company_Profile_2024.pdf">
-                    <div class="doc-meta">
-                        <div class="doc-icon pdf">&#128196;</div>
-                        <div>
-                            <div class="doc-name">YMJT_Company_Profile_2024.pdf</div>
-                            <div class="doc-info">Updated Jul 15, 2024 &middot; <span class="doc-size">--</span></div>
-                        </div>
-                    </div>
-                    <a href="download.aspx?file=C:\inetpub\wwwroot\documents\YMJT_Company_Profile_2024.pdf" class="doc-download" onclick="return downloadFile(this)">&#11015; Download</a>
-                </li>
-                <li class="doc-item" data-file="C:\inetpub\wwwroot\documents\Q3_2024_Performance_Report.xlsx">
-                    <div class="doc-meta">
-                        <div class="doc-icon xlsx">&#128202;</div>
-                        <div>
-                            <div class="doc-name">Q3_2024_Performance_Report.xlsx</div>
-                            <div class="doc-info">Updated Jul 10, 2024 &middot; <span class="doc-size">--</span></div>
-                        </div>
-                    </div>
-                    <a href="download.aspx?file=C:\inetpub\wwwroot\documents\Q3_2024_Performance_Report.xlsx" class="doc-download" onclick="return downloadFile(this)">&#11015; Download</a>
-                </li>
-                <li class="doc-item" data-file="C:\inetpub\wwwroot\documents\Employee_Handbook_v3.pdf">
-                    <div class="doc-meta">
-                        <div class="doc-icon pdf">&#128196;</div>
-                        <div>
-                            <div class="doc-name">Employee_Handbook_v3.pdf</div>
-                            <div class="doc-info">Updated Jun 28, 2024 &middot; <span class="doc-size">--</span></div>
-                        </div>
-                    </div>
-                    <a href="download.aspx?file=C:\inetpub\wwwroot\documents\Employee_Handbook_v3.pdf" class="doc-download" onclick="return downloadFile(this)">&#11015; Download</a>
-                </li>
-                <li class="doc-item" data-file="C:\inetpub\wwwroot\documents\IT_Infrastructure_Whitepaper.pdf">
-                    <div class="doc-meta">
-                        <div class="doc-icon pdf">&#128196;</div>
-                        <div>
-                            <div class="doc-name">IT_Infrastructure_Whitepaper.pdf</div>
-                            <div class="doc-info">Updated Jun 20, 2024 &middot; <span class="doc-size">--</span></div>
-                        </div>
-                    </div>
-                    <a href="download.aspx?file=C:\inetpub\wwwroot\documents\IT_Infrastructure_Whitepaper.pdf" class="doc-download" onclick="return downloadFile(this)">&#11015; Download</a>
-                </li>
-            </ul>
         </div>
     </div>
 
-    <div class="footer-mini">
-        &copy; 2024 Young Minds Join Together Corp. Internal use only.
-    </div>
+    <!-- Footer -->
+    <div class="glow-line"></div>
+    <footer class="py-8 text-center text-xs text-white/20">
+        &copy; 2024 Young Minds Join Together Corp. 內部使用。
+    </footer>
 
-    <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', function() {
-            var docs = [
-                'C:\\inetpub\\wwwroot\\documents\\YMJT_Company_Profile_2024.pdf',
-                'C:\\inetpub\\wwwroot\\documents\\Q3_2024_Performance_Report.xlsx',
-                'C:\\inetpub\\wwwroot\\documents\\Employee_Handbook_v3.pdf',
-                'C:\\inetpub\\wwwroot\\documents\\IT_Infrastructure_Whitepaper.pdf'
-            ];
-            var sizeSpans = document.querySelectorAll('.doc-size');
-            docs.forEach(function(filePath, i) {
-                var xhr = new XMLHttpRequest();
-                xhr.open('GET', 'download.aspx?file=' + filePath, true);
-                xhr.responseType = 'blob';
-                xhr.onload = function() {
-                    if (xhr.status === 200 && sizeSpans[i]) {
-                        var kb = (xhr.response.size / 1024).toFixed(1);
-                        sizeSpans[i].textContent = kb > 1024 ? (kb / 1024).toFixed(1) + ' MB' : kb + ' KB';
-                    }
-                };
-                xhr.onerror = function() {
-                    if (sizeSpans[i]) sizeSpans[i].textContent = 'Unavailable';
-                };
-                xhr.send();
-            });
-        });
-
-        function downloadFile(link) {
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', link.href, true);
-            xhr.responseType = 'blob';
-            xhr.onload = function() {
-                var url = window.URL.createObjectURL(xhr.response);
-                var a = document.createElement('a');
-                a.href = url;
-                a.download = link.href.split('\\').pop().split('/').pop();
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-                window.URL.revokeObjectURL(url);
-            };
-            xhr.send();
-            return false;
-        }
-    </script>
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script>AOS.init({ duration: 800, once: true, offset: 60 });</script>
 </body>
 </html>
 
 <script runat="server">
-protected void Page_Load(object sender, EventArgs e)
+protected void btnSearch_Click(object sender, EventArgs e)
 {
-    string fileName = Request.QueryString["file"];
-    if (!string.IsNullOrEmpty(fileName))
+    string keyword = txtSearch.Value.Trim();
+    if (string.IsNullOrEmpty(keyword))
     {
-        TryDownloadFile(fileName);
-    }
-}
-
-protected void btnDownload_Click(object sender, EventArgs e)
-{
-    string filePath = txtFile.Value;
-    TryDownloadFile(filePath);
-}
-
-private void TryDownloadFile(string filePath)
-{
-    if (!File.Exists(filePath))
-    {
-        Response.StatusCode = 404;
-        Response.End();
+        lblStatus.Text = "請輸入搜尋關鍵字。";
+        lblStatus.Visible = true;
         return;
     }
-
-    try
-    {
-        byte[] fileBytes = File.ReadAllBytes(filePath);
-        string fileName = Path.GetFileName(filePath);
-
-        Response.Clear();
-        Response.ContentType = "application/octet-stream";
-        Response.AddHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
-        Response.AddHeader("Content-Length", fileBytes.Length.ToString());
-
-        Response.BinaryWrite(fileBytes);
-        Response.End();
-    }
-    catch (System.Threading.ThreadAbortException)
-    {
-        throw;
-    }
-    catch (Exception)
-    {
-        Response.StatusCode = 403;
-        Response.End();
-    }
+    lblStatus.Text = "找不到與「" + Server.HtmlEncode(keyword) + "」相關的文件。請確認關鍵字後重試。";
+    lblStatus.Visible = true;
 }
 </script>
