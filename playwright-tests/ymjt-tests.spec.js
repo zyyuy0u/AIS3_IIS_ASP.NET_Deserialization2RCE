@@ -23,53 +23,50 @@ test.describe('首頁 (index.html)', () => {
     await page.goto(BASE + '/');
     await expect(page.locator('h1')).toContainText('集結年輕思維');
     await expect(page.locator('.btn-primary').first()).toBeVisible();
-    await expect(page.locator('.btn-outline').first()).toBeVisible();
+    await expect(page.locator('.btn-ghost').first()).toBeVisible();
   });
 
   test('數據統計區顯示 4 項指標', async ({ page }) => {
     await page.goto(BASE + '/');
-    await expect(page.locator('.stat-number')).toHaveCount(4);
-    await expect(page.locator('.stat-number').first()).toContainText('150+');
+    await expect(page.locator('.stat-num')).toHaveCount(4);
+    await expect(page.locator('.stat-num').first()).toContainText('150+');
   });
 
-  test('服務區塊有 6 張卡片', async ({ page }) => {
+  test('服務區塊有 6 個項目', async ({ page }) => {
     await page.goto(BASE + '/');
     await page.locator('#services').scrollIntoViewIfNeeded();
-    const cards = page.locator('#services .glass-card');
-    await expect(cards).toHaveCount(6);
+    const cells = page.locator('#services .bento-cell, #services .bento-accent');
+    await expect(cells).toHaveCount(6);
   });
 
-  test('專案區塊有 4 張卡片', async ({ page }) => {
+  test('專案區塊有 4 個項目', async ({ page }) => {
     await page.goto(BASE + '/');
     await page.locator('#projects').scrollIntoViewIfNeeded();
-    const cards = page.locator('#projects .glass-card');
+    const cards = page.locator('#projects .project-card');
     await expect(cards).toHaveCount(4);
   });
 
-  test('團隊區塊有 6 位成員', async ({ page }) => {
+  test('團隊區塊有 4 位成員', async ({ page }) => {
     await page.goto(BASE + '/');
     await page.locator('#team').scrollIntoViewIfNeeded();
-    const members = page.locator('#team .glass-card');
-    await expect(members).toHaveCount(6);
+    const members = page.locator('#team .team-member');
+    await expect(members).toHaveCount(4);
   });
 
   test('聯絡表單可輸入並送出', async ({ page }) => {
     await page.goto(BASE + '/');
     await page.locator('#contact').scrollIntoViewIfNeeded();
 
-    await page.fill('#contactName', '測試');
-    await page.fill('#contactEmail', 'test@test.com');
-    await page.fill('#contactCompany', '測試公司');
-    await page.fill('#contactMessage', '測試訊息');
+    const nameInput = page.locator('#contact input[type="text"]').first();
+    const emailInput = page.locator('#contact input[type="email"]');
+    await nameInput.fill('測試');
+    await emailInput.fill('test@test.com');
 
-    expect(await page.inputValue('#contactName')).toBe('測試');
-    expect(await page.inputValue('#contactEmail')).toBe('test@test.com');
+    expect(await nameInput.inputValue()).toBe('測試');
+    expect(await emailInput.inputValue()).toBe('test@test.com');
 
-    page.on('dialog', async dialog => {
-      expect(dialog.message()).toContain('感謝');
-      await dialog.accept();
-    });
-    await page.click('button[type="submit"]');
+    await page.click('#contact button[type="submit"]');
+    await expect(page.locator('.submit-btn')).toContainText('已送出');
   });
 
   test('客戶入口連結指向 report.aspx', async ({ page }) => {
@@ -136,7 +133,7 @@ test.describe('文件中心 (download.aspx)', () => {
 
   test('統計數字顯示 3 項', async ({ page }) => {
     await page.goto(BASE + '/download.aspx');
-    await expect(page.locator('.stat-number')).toHaveCount(3);
+    await expect(page.locator('.stat-num')).toHaveCount(3);
   });
 
   test('近期文件列表有 4 筆', async ({ page }) => {
@@ -185,8 +182,8 @@ test.describe('報表系統 (report.aspx)', () => {
 
   test('快速統計顯示 3 項指標', async ({ page }) => {
     await page.goto(BASE + '/report.aspx');
-    await expect(page.locator('.stat-number')).toHaveCount(3);
-    await expect(page.locator('.stat-number').first()).toContainText('24');
+    await expect(page.locator('.stat-num')).toHaveCount(3);
+    await expect(page.locator('.stat-num').first()).toContainText('24');
   });
 
   test('報表表單欄位可輸入', async ({ page }) => {
@@ -208,7 +205,7 @@ test.describe('報表系統 (report.aspx)', () => {
     await page.locator('#txtReportDate').fill('2024-01-01');
     await page.click('#btnGenerate');
     await page.waitForLoadState('networkidle');
-    const result = page.locator('.result-area');
+    const result = page.locator('.result-box');
     await expect(result).toContainText('測試報表');
     await expect(result).toContainText('2024-01-01');
   });
